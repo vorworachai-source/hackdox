@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HACKDOX</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="matrix"></canvas>
+  <div class="scanlines"></div>
+  <main class="screen">
+    <h1 class="title" data-text="HACKDOX">HACKDOX</h1>
+    <p class="subtitle">TOP SECRET HACKING SYSTEM</p>
+    <div class="terminal">
+      <pre id="log"></pre>
+      <div class="prompt">
+        <span class="caret"></span>
+      </div>
+    </div>
+    <div class="apps">
+      <a class="app" href="https://iplogger.org/" target="_blank" rel="noopener">
+        <div class="icon icon-logger">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="12"/><circle cx="32" cy="32" r="4"/><path d="M32 6v10M32 48v10M6 32h10M48 32h10M12 12l7 7M45 45l7 7M52 12l-7 7M19 45l-7 7"/></svg>
+        </div>
+        <span>IP LOGGER</span>
+      </a>
+      <a class="app" href="https://iplocation.io/" target="_blank" rel="noopener">
+        <div class="icon icon-lookup">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="20"/><line x1="32" y1="12" x2="32" y2="52"/><line x1="12" y1="32" x2="52" y2="32"/><circle cx="32" cy="32" r="3" fill="#00ff66"/></svg>
+        </div>
+        <span>IP LOOKUP</span>
+      </a>
+      <a class="app" href="https://whatsmynameapp.org/" target="_blank" rel="noopener">
+        <div class="icon icon-user">
+          <svg viewBox="0 0 64 64"><circle cx="32" cy="22" r="12"/><path d="M14 54c3-12 9-17 18-17s15 5 18 17"/></svg>
+        </div>
+        <span>USERNAME TRACKER</span>
+      </a>
+      <button class="app" id="open-vault">
+        <div class="icon icon-vault">
+          <svg viewBox="0 0 64 64"><rect x="10" y="22" width="44" height="28" rx="4"/><circle cx="44" cy="36" r="4"/><path d="M38 36h-8M38 36h8"/><path d="M22 22v-4a6 6 0 0 1 6-6h8a6 6 0 0 1 6 6v4"/></svg>
+        </div>
+        <span>URL VAULT</span>
+      </button>
+    </div>
+  </main>
+
+  <div class="vault-overlay" id="vault">
+    <div class="vault">
+      <div class="vault-head">
+        <h2>URL VAULT</h2>
+        <button class="vault-close" id="close-vault">×</button>
+      </div>
+      <form class="vault-add" id="add-form">
+        <div class="vault-fields">
+          <input type="text" id="name-input" placeholder="Name" autocomplete="off" />
+          <input type="text" id="url-input" placeholder="https://example.com" autocomplete="off" />
+        </div>
+        <button type="submit">STORE</button>
+      </form>
+      <ul class="vault-list" id="vault-list"></ul>
+      <p class="vault-empty" id="vault-empty">NO STORED URLS</p>
+    </div>
+  </div>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
