@@ -1,0 +1,432 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --neon: #00ff66;
+  --neon-dim: #00cc4d;
+  --bg: #010a03;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--neon);
+  font-family: "Courier New", Courier, monospace;
+  overflow: hidden;
+}
+
+#matrix {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.35;
+}
+
+.scanlines {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0px,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.25) 3px,
+    rgba(0, 0, 0, 0.25) 4px
+  );
+  mix-blend-mode: multiply;
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    rgba(0, 255, 102, 0.06),
+    transparent
+  );
+  animation: scan 6s linear infinite;
+}
+
+@keyframes scan {
+  0% { top: -20%; }
+  100% { top: 110%; }
+}
+
+.screen {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.title {
+  font-size: clamp(3rem, 14vw, 9rem);
+  letter-spacing: 0.12em;
+  text-shadow:
+    0 0 6px var(--neon),
+    0 0 20px var(--neon),
+    0 0 60px var(--neon),
+    0 0 100px var(--neon-dim);
+  position: relative;
+  animation: flicker 4s infinite;
+}
+
+.subtitle {
+  margin-top: 0.5rem;
+  font-size: clamp(0.75rem, 2.4vw, 1.3rem);
+  letter-spacing: 0.55em;
+  text-indent: 0.55em;
+  color: var(--neon);
+  opacity: 0.85;
+  text-shadow: 0 0 8px var(--neon);
+  white-space: nowrap;
+}
+
+.title::before,
+.title::after {
+  content: attr(data-text);
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  color: var(--neon);
+}
+
+.title::before {
+  animation: glitch-a 3.2s infinite steps(1);
+  clip-path: inset(0 0 55% 0);
+  opacity: 0.8;
+}
+
+.title::after {
+  animation: glitch-b 2.7s infinite steps(1);
+  clip-path: inset(55% 0 0 0);
+  opacity: 0.8;
+}
+
+@keyframes glitch-a {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-3px, 2px); }
+  40% { transform: translate(3px, -1px); }
+  60% { transform: translate(-2px, -2px); }
+  80% { transform: translate(2px, 1px); }
+}
+
+@keyframes glitch-b {
+  0%, 100% { transform: translate(0); }
+  25% { transform: translate(3px, -1px); }
+  50% { transform: translate(-3px, 1px); }
+  75% { transform: translate(2px, 2px); }
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.4; }
+  94% { opacity: 1; }
+  96% { opacity: 0.7; }
+  97% { opacity: 1; }
+}
+
+.terminal {
+  margin-top: 3rem;
+  width: min(680px, 92vw);
+  height: 180px;
+  border: 1px solid rgba(0, 255, 102, 0.4);
+  border-radius: 6px;
+  padding: 0.9rem 1.1rem;
+  text-align: left;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  background: rgba(0, 10, 3, 0.75);
+  box-shadow:
+    inset 0 0 30px rgba(0, 255, 102, 0.08),
+    0 0 30px rgba(0, 255, 102, 0.15);
+  overflow: hidden;
+  position: relative;
+}
+
+#log {
+  white-space: pre-wrap;
+  font: inherit;
+  color: var(--neon);
+  text-shadow: 0 0 6px var(--neon-dim);
+}
+
+.prompt {
+  display: flex;
+  align-items: center;
+  margin-top: 0.2rem;
+}
+
+.prompt::before {
+  content: "guest@hackdox:~$";
+  color: var(--neon-dim);
+  margin-right: 0.5rem;
+}
+
+.caret {
+  width: 0.6em;
+  height: 1.1em;
+  background: var(--neon);
+  box-shadow: 0 0 8px var(--neon);
+  animation: blink 1s steps(1) infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.apps {
+  margin-top: 3rem;
+  display: flex;
+  gap: 2.2rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
+  color: var(--neon);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  opacity: 0.92;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.app:hover {
+  transform: translateY(-6px);
+  opacity: 1;
+}
+
+.app span {
+  text-shadow: 0 0 8px var(--neon-dim);
+}
+
+.icon {
+  width: 84px;
+  height: 84px;
+  border-radius: 22px;
+  border: 1px solid var(--neon);
+  box-shadow:
+    0 0 18px var(--neon-dim),
+    inset 0 0 22px rgba(0, 255, 102, 0.25);
+  display: grid;
+  place-items: center;
+  background: rgba(0, 20, 6, 0.7);
+}
+
+.icon svg {
+  width: 58%;
+  height: 58%;
+  fill: none;
+  stroke: var(--neon);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 5px var(--neon));
+}
+
+.icon-lookup svg {
+  animation: spin 14s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.app {
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.vault-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 5, 1, 0.82);
+  backdrop-filter: blur(2px);
+}
+
+.vault-overlay.open {
+  display: flex;
+}
+
+.vault {
+  width: min(560px, 92vw);
+  max-height: 80vh;
+  border: 1px solid var(--neon);
+  border-radius: 8px;
+  background: rgba(0, 15, 5, 0.95);
+  box-shadow: 0 0 40px rgba(0, 255, 102, 0.25), inset 0 0 30px rgba(0, 255, 102, 0.06);
+  padding: 1.2rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.vault-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.vault-head h2 {
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-shadow: 0 0 10px var(--neon);
+}
+
+.vault-close {
+  background: none;
+  border: 1px solid var(--neon);
+  color: var(--neon);
+  font-size: 1.2rem;
+  line-height: 1;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--neon-dim);
+}
+
+.vault-close:hover {
+  background: var(--neon);
+  color: var(--bg);
+}
+
+.vault-fields {
+  display: flex;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.vault-add {
+  display: flex;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.vault-add input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(0, 10, 3, 0.8);
+  border: 1px solid rgba(0, 255, 102, 0.5);
+  color: var(--neon);
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 0.55rem 0.7rem;
+  border-radius: 4px;
+  outline: none;
+  box-shadow: inset 0 0 10px rgba(0, 255, 102, 0.08);
+}
+
+.vault-add input:focus {
+  border-color: var(--neon);
+  box-shadow: 0 0 12px var(--neon-dim), inset 0 0 10px rgba(0, 255, 102, 0.15);
+}
+
+.vault-add input::placeholder {
+  color: rgba(0, 255, 102, 0.4);
+}
+
+.vault-add button {
+  background: none;
+  border: 1px solid var(--neon);
+  color: var(--neon);
+  font: inherit;
+  letter-spacing: 0.12em;
+  padding: 0.55rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0 0 10px var(--neon-dim);
+}
+
+.vault-add button:hover {
+  background: var(--neon);
+  color: var(--bg);
+}
+
+.vault-list {
+  list-style: none;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 100px;
+}
+
+.vault-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.3rem;
+  border-bottom: 1px solid rgba(0, 255, 102, 0.15);
+}
+
+.vault-list a {
+  flex: 1;
+  color: var(--neon);
+  font-size: 0.82rem;
+  text-decoration: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-shadow: 0 0 6px var(--neon-dim);
+}
+
+.vault-list a:hover {
+  text-decoration: underline;
+}
+
+.vault-list .del {
+  background: none;
+  border: 1px solid var(--neon);
+  color: var(--neon);
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.vault-list .del:hover {
+  background: var(--neon);
+  color: var(--bg);
+}
+
+.vault-empty {
+  text-align: center;
+  color: rgba(0, 255, 102, 0.5);
+  letter-spacing: 0.2em;
+  font-size: 0.8rem;
+  padding: 1.5rem 0;
+}
+
