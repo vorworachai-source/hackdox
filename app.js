@@ -1,3 +1,34 @@
+const snd = {
+  click: new Audio("./sfx/click.wav"),
+  beep: new Audio("./sfx/beep.wav"),
+  hum: new Audio("./sfx/hum.wav"),
+  enabled: false,
+  play(name) {
+    if (!this.enabled || !this[name]) return;
+    if (name === "click" && this.click.playing) {
+      const c = this.click.cloneNode();
+      c.volume = 0.15;
+      c.play();
+      return;
+    }
+    this[name].currentTime = 0;
+    this[name].volume = this[name].volume || 1;
+    this[name].play();
+  },
+};
+snd.hum.loop = true;
+snd.hum.volume = 0.35;
+snd.beep.volume = 0.4;
+snd.click.volume = 0.15;
+
+function startAudio() {
+  if (snd.enabled) return;
+  snd.enabled = true;
+  snd.hum.play();
+}
+startAudio();
+document.addEventListener("pointerdown", startAudio, { once: true });
+
 const canvas = document.getElementById("matrix");
 const ctx = canvas.getContext("2d");
 
@@ -31,14 +62,25 @@ function draw() {
 }
 
 setInterval(draw, 50);
+setInterval(() => snd.play("click"), 280);
 
 const lines = [
   "> INITIALIZING HACKDOX CORE ............. OK",
-  "> BYPASSING FIREWALL v7.3 ............... OK",
+  "> CHECKING VERSION ............... OK",
   "> CRACKING ENCRYPTION [AES-256] ......... OK",
   "> INJECTING ROOTKIT ..................... OK",
   "> ESTABLISHING UPLINK ................... OK",
-  "> ACCESS GRANTED :: WELCOME, OPERATOR",
+  "> ACCESS GRANTED : WELCOME, HACKER",
+  "User : How do i track someones ip address?",
+  "> GO TO IP LOGGER AND SHORTEN A WEBSITE",
+  "> SEND IT TO SOMEONE",
+  "> WAIT FOR SOMEONE TO VISIT IT",
+  "User : How do i track where the ip is from?",
+  "> GO TO IP LOOKUP",
+  "User : How do i save my shortcut?",
+  "> GO TO URL VAULT",
+  "User:How do i find-",
+  "STOP IT YOU ANNOYING BITC-",
 ];
 
 const log = document.getElementById("log");
@@ -54,6 +96,7 @@ function typeLine() {
   if (charIndex <= line.length) {
     log.textContent = lines.slice(0, lineIndex).join("\n") + "\n" + line.slice(0, charIndex);
     charIndex++;
+    snd.play("click");
     setTimeout(typeLine, 28);
   } else {
     log.textContent = lines.slice(0, lineIndex + 1).join("\n");
@@ -114,11 +157,15 @@ function render() {
 }
 
 openBtn.addEventListener("click", () => {
+  snd.play("beep");
   vault.classList.add("open");
   nameInput.focus();
 });
 
-closeBtn.addEventListener("click", () => vault.classList.remove("open"));
+closeBtn.addEventListener("click", () => {
+  snd.play("beep");
+  vault.classList.remove("open");
+});
 
 vault.addEventListener("click", (e) => {
   if (e.target === vault) vault.classList.remove("open");
